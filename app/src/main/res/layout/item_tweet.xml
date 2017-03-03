@@ -27,6 +27,7 @@
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_alignBottom="@+id/ivProfileImage"
+        android:autoLink="all"
         android:id="@+id/tvBody"
         android:layout_below="@+id/tvUserName" />
 
