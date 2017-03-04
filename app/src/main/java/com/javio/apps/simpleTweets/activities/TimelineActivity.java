@@ -2,6 +2,7 @@ package com.javio.apps.simpleTweets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -32,12 +33,14 @@ public class TimelineActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 200;
     private TwitterClient client;
 
-
     private LinkedList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
 
     @BindView(R.id.lvTweets)
     ListView lvTweets;
+
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout swipeContainer;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,8 +57,6 @@ public class TimelineActivity extends AppCompatActivity {
         client = TwitterApplication.getRestClient();//singleton client
 
         setupViews();
-
-        populateTimeline();
     }
 
 
@@ -97,6 +98,20 @@ public class TimelineActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.d("DEBUG","");
+                populateTimeline();
+                //swipeContainer.setRefreshing(false);
+            }
+        });
+
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     @Override
