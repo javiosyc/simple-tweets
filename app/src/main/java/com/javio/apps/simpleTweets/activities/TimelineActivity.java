@@ -22,6 +22,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.LinkedList;
 
@@ -141,7 +142,7 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK) {
-            Tweet tweet = data.getParcelableExtra("tweet");
+            Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
 
             tweets.addFirst(tweet);
             aTweets.notifyDataSetChanged();

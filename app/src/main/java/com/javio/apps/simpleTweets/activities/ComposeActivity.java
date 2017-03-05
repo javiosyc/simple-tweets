@@ -16,6 +16,7 @@ import com.javio.apps.simpleTweets.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +65,7 @@ public class ComposeActivity extends AppCompatActivity {
                 Tweet tweet = Tweet.fromJSON(json);
 
                 Intent data = new Intent();
-                data.putExtra("tweet", tweet);
+                data.putExtra("tweet", Parcels.wrap(tweet));
                 setResult(RESULT_OK, data);
                 finish();
             }

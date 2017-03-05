@@ -1,8 +1,5 @@
 package com.javio.apps.simpleTweets.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.javio.apps.simpleTweets.MyDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
@@ -12,6 +9,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
@@ -20,18 +18,9 @@ import java.util.ArrayList;
  */
 
 @Table(database = MyDatabase.class)
-public class Tweet implements Parcelable {
-    public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
-        @Override
-        public Tweet createFromParcel(Parcel source) {
-            return new Tweet(source);
-        }
+@Parcel
+public class Tweet {
 
-        @Override
-        public Tweet[] newArray(int size) {
-            return new Tweet[size];
-        }
-    };
     //list out the attribute
     @Column
     private String body;
@@ -46,12 +35,6 @@ public class Tweet implements Parcelable {
     public Tweet() {
     }
 
-    protected Tweet(Parcel in) {
-        this.body = in.readString();
-        this.uid = in.readLong();
-        this.user = in.readParcelable(User.class.getClassLoader());
-        this.createdAt = in.readString();
-    }
 
     //Deserialize the JSON and build Tweet objects
     public static Tweet fromJSON(JSONObject jsonObject) {
@@ -119,19 +102,6 @@ public class Tweet implements Parcelable {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.body);
-        dest.writeLong(this.uid);
-        dest.writeParcelable(this.user, flags);
-        dest.writeString(this.createdAt);
     }
 
 }

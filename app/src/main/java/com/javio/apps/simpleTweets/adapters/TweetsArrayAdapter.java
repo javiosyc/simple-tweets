@@ -16,6 +16,8 @@ import com.javio.apps.simpleTweets.utils.TweetUtils;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 /**
  * Created by javiosyc on 2017/3/2.
  */
@@ -47,7 +49,9 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         ivProfileImage.setImageResource(android.R.color.transparent); //clear out the old image for a recycled view
 
-        Glide.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        Glide.with(getContext()).load(tweet.getUser().getProfileImageUrl())
+                .bitmapTransform(new RoundedCornersTransformation(getContext(),5,5))
+                .into(ivProfileImage);
         //Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
 
         //5. Return the view to inserted into the list
