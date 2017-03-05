@@ -3,6 +3,12 @@ package com.javio.apps.simpleTweets.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.javio.apps.simpleTweets.MyDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,39 +19,38 @@ import java.util.ArrayList;
  * Created by javiosyc on 2017/3/2.
  */
 
+@Table(database = MyDatabase.class)
 public class Tweet implements Parcelable {
+    public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
+        @Override
+        public Tweet createFromParcel(Parcel source) {
+            return new Tweet(source);
+        }
+
+        @Override
+        public Tweet[] newArray(int size) {
+            return new Tweet[size];
+        }
+    };
     //list out the attribute
+    @Column
     private String body;
+    @Column
+    @PrimaryKey
     private long uid;
+    @ForeignKey(saveForeignKeyModel = false)
     private User user;
+    @Column
     private String createdAt;
 
-    public User getUser() {
-        return user;
+    public Tweet() {
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public long getUid() {
-        return uid;
-    }
-
-    public void setUid(long uid) {
-        this.uid = uid;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    protected Tweet(Parcel in) {
+        this.body = in.readString();
+        this.uid = in.readLong();
+        this.user = in.readParcelable(User.class.getClassLoader());
+        this.createdAt = in.readString();
     }
 
     //Deserialize the JSON and build Tweet objects
@@ -84,6 +89,38 @@ public class Tweet implements Parcelable {
         return tweets;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -97,25 +134,4 @@ public class Tweet implements Parcelable {
         dest.writeString(this.createdAt);
     }
 
-    public Tweet() {
-    }
-
-    protected Tweet(Parcel in) {
-        this.body = in.readString();
-        this.uid = in.readLong();
-        this.user = in.readParcelable(User.class.getClassLoader());
-        this.createdAt = in.readString();
-    }
-
-    public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
-        @Override
-        public Tweet createFromParcel(Parcel source) {
-            return new Tweet(source);
-        }
-
-        @Override
-        public Tweet[] newArray(int size) {
-            return new Tweet[size];
-        }
-    };
 }

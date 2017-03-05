@@ -69,8 +69,8 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("count", DEFAULT_COUNT);
         params.put("since_id", 1);
 
-        if(maxId != 0) {
-            params.put("max_id",maxId);
+        if (maxId != 0) {
+            params.put("max_id", maxId);
         }
 
         //Execute the request
@@ -88,7 +88,6 @@ public class TwitterClient extends OAuthBaseClient {
         //Execute the request
         getClient().post(apiUrl, params, handler);
     }
-
 
 
     //HomeTimeLine = Gets us the home function

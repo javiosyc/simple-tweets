@@ -13,7 +13,7 @@ import com.javio.apps.simpleTweets.R;
 
 public class ToolBarUtils {
 
-    private static final int TOOL_BAR_LOGO = R.drawable.ic_book_24;
+    private static final int TOOL_BAR_LOGO = R.drawable.ic_twitter_24;
 
     private static final String SETTINGS_FILE = "Settings";
 

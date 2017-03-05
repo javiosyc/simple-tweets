@@ -49,6 +49,7 @@ public class SampleModel extends BaseModel {
     // Record Finders
     public static SampleModel byId(long id) {
         return new Select().from(SampleModel.class).where(SampleModel_Table.id.eq(id)).querySingle();
+
     }
 
     public static List<SampleModel> recentItems() {

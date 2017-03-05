@@ -3,6 +3,11 @@ package com.javio.apps.simpleTweets.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.javio.apps.simpleTweets.MyDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,27 +15,38 @@ import org.json.JSONObject;
  * Created by javiosyc on 2017/3/2.
  */
 
+@Table(database = MyDatabase.class)
 public class User implements Parcelable {
 
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+    @Column
     private String name;
+    @Column
+    @PrimaryKey
     private long uid;
+    @Column
     private String screenName;
+    @Column
     private String profileImageUrl;
 
-    public String getName() {
-        return name;
+    public User() {
     }
 
-    public long getUid() {
-        return uid;
-    }
-
-    public String getScreenName() {
-        return screenName;
-    }
-
-    public String getProfileImageUrl() {
-        return profileImageUrl;
+    protected User(Parcel in) {
+        this.name = in.readString();
+        this.uid = in.readLong();
+        this.screenName = in.readString();
+        this.profileImageUrl = in.readString();
     }
 
     public static User fromJSON(JSONObject json) {
@@ -49,6 +65,38 @@ public class User implements Parcelable {
         return u;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -61,26 +109,4 @@ public class User implements Parcelable {
         dest.writeString(this.screenName);
         dest.writeString(this.profileImageUrl);
     }
-
-    public User() {
-    }
-
-    protected User(Parcel in) {
-        this.name = in.readString();
-        this.uid = in.readLong();
-        this.screenName = in.readString();
-        this.profileImageUrl = in.readString();
-    }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel source) {
-            return new User(source);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 }

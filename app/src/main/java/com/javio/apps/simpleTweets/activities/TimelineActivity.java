@@ -2,11 +2,13 @@ package com.javio.apps.simpleTweets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.javio.apps.simpleTweets.R;
@@ -42,6 +44,10 @@ public class TimelineActivity extends AppCompatActivity {
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout swipeContainer;
 
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_post, menu);
@@ -65,14 +71,18 @@ public class TimelineActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.menu_item_post) {
-            Intent intent = new Intent(TimelineActivity.this, ComposeActivity.class);
-
-            startActivityForResult(intent, REQUEST_CODE);
+            startComposeActivity();
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startComposeActivity() {
+        Intent intent = new Intent(TimelineActivity.this, ComposeActivity.class);
+
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     private void setupViews() {
@@ -99,12 +109,25 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startComposeActivity();
+            }
+        });
+
+        populateTimeline();
+
+        //swipeRefreshLayoutInit();
+    }
+
+    private void swipeRefreshLayoutInit() {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.d("DEBUG","");
+                Log.d("DEBUG", "");
                 populateTimeline();
-                //swipeContainer.setRefreshing(false);
+                swipeContainer.setRefreshing(false);
             }
         });
 
@@ -116,11 +139,13 @@ public class TimelineActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Tweet tweet = data.getParcelableExtra("tweet");
 
-        tweets.addFirst(tweet);
+        if (resultCode == RESULT_OK) {
+            Tweet tweet = data.getParcelableExtra("tweet");
 
-        aTweets.notifyDataSetChanged();
+            tweets.addFirst(tweet);
+            aTweets.notifyDataSetChanged();
+        }
     }
 
     private void loadNextData(long maxId) {
@@ -153,5 +178,4 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
     }
-
 }

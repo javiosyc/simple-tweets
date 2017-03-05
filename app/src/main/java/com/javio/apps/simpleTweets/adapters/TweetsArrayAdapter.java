@@ -9,10 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.javio.apps.simpleTweets.R;
 import com.javio.apps.simpleTweets.models.Tweet;
 import com.javio.apps.simpleTweets.utils.TweetUtils;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -47,7 +47,8 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         ivProfileImage.setImageResource(android.R.color.transparent); //clear out the old image for a recycled view
 
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        Glide.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        //Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
 
         //5. Return the view to inserted into the list
         return convertView;
