@@ -16,15 +16,19 @@ import com.javio.apps.simpleTweets.TwitterApplication;
 import com.javio.apps.simpleTweets.adapters.TweetsArrayAdapter;
 import com.javio.apps.simpleTweets.listeners.EndlessScrollListener;
 import com.javio.apps.simpleTweets.models.Tweet;
+import com.javio.apps.simpleTweets.models.Tweet_Table;
+import com.javio.apps.simpleTweets.models.User;
 import com.javio.apps.simpleTweets.network.TwitterClient;
 import com.javio.apps.simpleTweets.utils.ToolBarUtils;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,9 +121,17 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
 
-        populateTimeline();
+        loadTweetsFromDB();
 
+        if (tweets.size() == 0)
+            populateTimeline();
         //swipeRefreshLayoutInit();
+    }
+
+    private void loadTweetsFromDB() {
+        List<Tweet> tweets = SQLite.select().from(Tweet.class).orderBy(Tweet_Table.uid,false).queryList();
+        aTweets.addAll(tweets);
+        aTweets.notifyDataSetChanged();
     }
 
     private void swipeRefreshLayoutInit() {
@@ -154,7 +166,10 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 Log.d("DEBUG", json.toString());
-                aTweets.addAll(Tweet.fromJSONArray(json));
+
+                List<Tweet> tweets = Tweet.fromJSONArray(json);
+                saveTweets(tweets);
+                aTweets.addAll(tweets);
             }
 
             @Override
@@ -170,7 +185,11 @@ public class TimelineActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 Log.d("DEBUG", json.toString());
 
-                aTweets.addAll(Tweet.fromJSONArray(json));
+                List<Tweet> tweets = Tweet.fromJSONArray(json);
+
+                saveTweets(tweets);
+
+                aTweets.addAll(tweets);
             }
 
             @Override
@@ -178,5 +197,13 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("DEBUG", errorResponse.toString());
             }
         });
+    }
+
+    private void saveTweets(List<Tweet> tweets) {
+        for (Tweet tweet : tweets) {
+            User user = tweet.getUser();
+            user.save();
+            tweet.save();
+        }
     }
 }

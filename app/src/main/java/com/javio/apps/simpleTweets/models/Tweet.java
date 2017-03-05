@@ -5,6 +5,7 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 @Table(database = MyDatabase.class)
 @Parcel
-public class Tweet {
+public class Tweet extends BaseModel {
 
     //list out the attribute
     @Column

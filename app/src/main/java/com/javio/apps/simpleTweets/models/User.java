@@ -4,6 +4,7 @@ import com.javio.apps.simpleTweets.MyDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +16,7 @@ import org.parceler.Parcel;
 
 @Table(database = MyDatabase.class)
 @Parcel
-public class User {
+public class User extends BaseModel {
 
     @Column
     private String name;
